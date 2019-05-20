@@ -40,7 +40,7 @@ if __name__ == '__main__':
     # actions = map(lambda record: {'_index': 'disease', '_type': '_doc', **record}, records)
     # bulk(es, actions)
 
-    records = import_disease_clinical_sign_from_source('Data/disease.json')
+    records = import_disease_clinical_sign_from_source('Data/disease_clinical_sign.json')
     actions = map(lambda record: {'_index': 'disease_clinical_sign', '_type': '_doc', **record}, records)
     bulk(es, actions)
 
