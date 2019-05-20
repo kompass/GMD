@@ -25,9 +25,9 @@ def import_disease_from_source(path):
             ref_count = int(row['value']['ExternalReferenceList']['count'])
             refs = []
             if  ref_count == 1:
-                refs.append(row['value']['SynonymList']['Synonym']['text'])
+                refs.append(row['value']['ExternalReferenceList']['ExternalReference']['text'])
             elif ref_count != 0:
-                for synonym in row['value']['SynonymList']['Synonym']:
+                for synonym in row['value']['ExternalReferenceList']['ExternalReference']:
                     refs.append(synonym['text'])
 
             for ref in refs:
@@ -57,9 +57,9 @@ if __name__ == '__main__':
     from elasticsearch.helpers import bulk
     es = Elasticsearch()
 
-    # records = import_disease_from_source('Data/disease.json')
-    # actions = map(lambda record: {'_index': 'disease', '_type': '_doc', **record}, records)
-    # bulk(es, actions)
+    records = import_disease_from_source('Data/disease.json')
+    actions = map(lambda record: {'_index': 'disease', '_type': '_doc', **record}, records)
+    bulk(es, actions)
 
     records = import_disease_clinical_sign_from_source('Data/disease_clinical_sign.json')
     actions = map(lambda record: {'_index': 'disease_clinical_sign', '_type': '_doc', **record}, records)
