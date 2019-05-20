@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, jsonify
 import urllib.parse
 import pymongo
 
@@ -53,4 +53,4 @@ app = Flask(__name__)
 def disease(name):
     name = urllib.parse.unquote_plus(name)
 
-    return {'diseases': [post for post in db.omim.find({'TI': name})]}
+    return jsonify({'diseases': [post for post in db.omim.find({'TI': name})]})
