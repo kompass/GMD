@@ -20,5 +20,8 @@ def import_disease_from_source(path):
             yield {'name': name, 'link': link, 'synonyms': synonyms}
 
 if __name__ == '__main__':
-    for record in import_disease_from_source('Data/disease.json'):
-        print(record)
+    records = import_disease_from_source('Data/disease.json')
+    actions = map(lambda record: {'_index': 'disease', '_type': '_doc', **record}, records)
+    bulk(es, actions)
+
+    print('Done.')
