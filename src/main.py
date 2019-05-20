@@ -53,5 +53,4 @@ app = Flask(__name__)
 def disease(name):
     name = urllib.parse.unquote_plus(name)
 
-    for post in db.omim.find({'TI': name}):
-    	print(post)
+    return {'diseases': [post for post in db.omim.find({'TI': name})]}
