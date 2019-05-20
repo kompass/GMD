@@ -17,7 +17,8 @@ def import_disease_from_source(path):
                 for synonym in row['value']['SynonymList']['Synonym']:
                     synonyms.append(synonym['text'])
 
-            yield {'name': name, 'link': link, 'synonyms': synonyms
+            yield {'name': name, 'link': link, 'synonyms': synonyms}
 
 if __name__ == '__main__':
-    import_disease_from_source('Data/disease.json')
+    for record in import_disease_from_source('Data/disease.json'):
+        print(record)
