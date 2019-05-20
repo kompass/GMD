@@ -25,10 +25,10 @@ def import_disease_from_source(path):
             ref_count = int(row['value']['ExternalReferenceList']['count'])
             refs = []
             if  ref_count == 1:
-                refs.append(row['value']['ExternalReferenceList']['ExternalReference']['text'])
+                refs.append(row['value']['ExternalReferenceList']['ExternalReference'])
             elif ref_count != 0:
-                for synonym in row['value']['ExternalReferenceList']['ExternalReference']:
-                    refs.append(synonym['text'])
+                for ref in row['value']['ExternalReferenceList']['ExternalReference']:
+                    refs.append(ref)
 
             for ref in refs:
                 if ref['Source'] == 'OMIM':
