@@ -52,3 +52,6 @@ app = Flask(__name__)
 @app.route('/gmd/api/disease/<name>')
 def hello(name):
     name = urllib.parse.unquote_plus(name)
+
+    for post in db.omim.find():
+    	print(post)
