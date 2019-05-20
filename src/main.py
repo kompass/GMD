@@ -67,5 +67,7 @@ def disease(name):
 
     return jsonify({
     		'name': name,
-    		'synonyms': list(synonyms)
+    		'synonyms': list(synonyms),
+    		'symptoms': [],
+    		'drugs': []
     	})
