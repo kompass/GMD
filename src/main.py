@@ -1,6 +1,7 @@
 from flask import Flask, jsonify
 import urllib.parse
 import pymongo
+from flask_cors import CORS
 
 from omim import import_omim_from_source, import_omim_onto_from_source
 from orpha import import_disease_from_source, import_disease_clinical_sign_from_source
@@ -47,6 +48,7 @@ print('Done.')
 
 
 app = Flask(__name__)
+CORS(app)
 
 
 @app.route('/gmd/api/disease/<name>')
