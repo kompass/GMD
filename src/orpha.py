@@ -34,7 +34,7 @@ def import_disease_from_source(path):
                 if ref['Source'] == 'OMIM':
                     omim.append(ref['Reference'])
                 elif ref['Source'] == 'UMLS':
-                    umls.append(ref['Reference'])
+                    ulms.append(ref['Reference'])
                 elif ref['Source'] == 'MEDDRA':
                     meddra.append(ref['Reference'])
 
