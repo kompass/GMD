@@ -1,4 +1,5 @@
 from flask import Flask
+import urllib
 from elasticsearch import Elasticsearch
 from elasticsearch.helpers import bulk
 
@@ -51,4 +52,4 @@ app = Flask(__name__)
 
 @app.route('/gmd/api/disease/<name>')
 def hello(name):
-    return name
+    return urllib.unquote(name)
