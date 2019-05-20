@@ -50,6 +50,6 @@ print('Done.')
 app = Flask(__name__)
 
 
-@app.route('/gmd/api/disease/<name>')
+@app.route('/gmd/api/disease/?q=<name>')
 def hello(name):
-    return urllib.parse.unquote(name)
+    return urllib.parse.unquote_plus(name)
