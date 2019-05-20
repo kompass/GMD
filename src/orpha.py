@@ -38,7 +38,7 @@ def import_disease_from_source(path):
                 elif ref['Source'] == 'MEDDRA':
                     meddra.append(ref['Reference'])
 
-            yield {'name': name, 'link': link, 'synonyms': synonyms, 'omim': omim, 'ulms': ulms, 'meddra': meddra}
+            yield {'name': name, 'link': link, 'orpha': orpha, 'synonyms': synonyms, 'omim': omim, 'ulms': ulms, 'meddra': meddra}
 
 
 def import_disease_clinical_sign_from_source(path):
@@ -48,9 +48,11 @@ def import_disease_clinical_sign_from_source(path):
         for row in j['rows']:
             disease = row['value']['disease']['Name']['text']
 
+            orphaNumber = row['value']['disease']['OrphaNumber']
+
             clinicalSign = row['value']['clinicalSign']['Name']['text']
 
-            yield {'disease': disease, 'clinicalSign': clinicalSign}
+            yield {'disease': disease, 'orphaNumber': orphaNumber, 'clinicalSign': clinicalSign}
 
 if __name__ == '__main__':
     from elasticsearch import Elasticsearch
