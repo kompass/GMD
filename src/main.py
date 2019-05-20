@@ -53,4 +53,19 @@ app = Flask(__name__)
 def disease(name):
     name = urllib.parse.unquote_plus(name)
 
-    return jsonify({'diseases': [post for post in db.disease.find({'$or': [{'name': name}, {'synonyms': name}]}, {'_id': False})]})
+    synonyms = set()
+
+    disease_records = db.disease.find({'$or': [{'name': name}, {'synonyms': name}]}, {'_id': False})
+
+    for record in disease_records:
+    	synonyms.add(record['name'])
+
+    	for syn in record['synonyms']:
+    		synonyms.add(syn)
+
+    synonyms.remove(name)
+
+    return jsonify({
+    		'name': name,
+    		'synonyms': synonyms
+    	})
