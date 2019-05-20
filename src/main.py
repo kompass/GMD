@@ -17,7 +17,7 @@ def clean_class_id(record):
 
     return record
 
-client = pymongo.MongoClient('localhost', 27017)
+client = pymongo.MongoClient('127.0.0.1', 27017)
 db = client['gmd']
 
 print('Reindexing OMIM...', end='', flush=True)
@@ -50,8 +50,8 @@ app = Flask(__name__)
 
 
 @app.route('/gmd/api/disease/<name>')
-def hello(name):
+def disease(name):
     name = urllib.parse.unquote_plus(name)
 
-    for post in db.omim.find():
+    for post in db.omim.find({'TI': name}):
     	print(post)
