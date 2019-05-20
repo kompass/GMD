@@ -19,7 +19,7 @@ def clean_class_id(record):
 
 es = Elasticsearch()
 
-print('Reindex OMIM.')
+print('Reindexing OMIM...', end='')
 es.indices.delete(index='omim', ignore=[400, 404])
 
 records = import_omim_from_source('Data/omim.txt', ['TI', 'CS', 'NO'], ['NO'])
@@ -33,7 +33,7 @@ actions = map(lambda record: {'_index': 'omim_onto', '_type': '_doc', **record},
 bulk(es, actions)
 
 print('Done.')
-print('Reindex Orpha.')
+print('Reindexing Orpha...', end='')
 
 records = import_disease_from_source('Data/disease.json')
 actions = map(lambda record: {'_index': 'disease', '_type': '_doc', **record}, records)
@@ -42,6 +42,8 @@ bulk(es, actions)
 records = import_disease_clinical_sign_from_source('Data/disease_clinical_sign.json')
 actions = map(lambda record: {'_index': 'disease_clinical_sign', '_type': '_doc', **record}, records)
 bulk(es, actions)
+
+print('Done.')
 
 app = Flask(__name__)
 
