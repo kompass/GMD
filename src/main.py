@@ -53,4 +53,4 @@ app = Flask(__name__)
 def disease(name):
     name = urllib.parse.unquote_plus(name)
 
-    return jsonify({'diseases': [post for post in db.omim.find({'TI': name})]})
+    return jsonify({'diseases': [post for post in db.disease.find({'name': name})]})
