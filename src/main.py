@@ -45,10 +45,10 @@ bulk(es, actions)
 
 print('Done.')
 
-app = Flask(__name__)
 
+app = Flask(__name__)
 
 
 @app.route('/gmd/api/disease/<name>')
 def hello(name):
-    return "Hello World!"
+    return name
