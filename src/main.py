@@ -136,9 +136,9 @@ def omim_onto_disease_by_name(name):
         synonyms.add(record['PreferredLabel'])
         synonyms.update(record['Synonyms'])
 
-        omim_ids.update(record['ClassId'])
+        omim_ids.add(record['ClassId'])
 
-        ulms_ids.update(record['CUI'])
+        ulms_ids.add(record['CUI'])
 
     return {
         'synonyms': synonyms,
