@@ -1,3 +1,5 @@
+import csv
+
 def import_omim_from_source(path, fields, numerics):
     record = None
     fieldname = None
@@ -37,24 +39,12 @@ def import_omim_from_source(path, fields, numerics):
 
 
 def import_omim_onto_from_source(path, columns):
-    CLASS_ID = 0
-    PREFERRED_LABEL = 1
-    SYNONYMS = 2
-    CUI = 5
+    with open(path, newline='') as reader:
+        rows = csv.reader(reader, delimiter=',')
 
-    with open(path) as reader:
-        # Skip first line (header)
-        reader.readline()
-
-        line = reader.readline()
-
-        while line != '':
-            row = line.split(',')
-
+        for row in rows:
             record = { column_name: row[column_id] for column_name, column_id in columns.items() }
             yield record
-
-            line = reader.readline()
 
 
 
