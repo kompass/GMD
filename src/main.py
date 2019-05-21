@@ -174,7 +174,7 @@ def disease(name):
         ulms_ids.update(result['ulms_ids'])
         meddra_ids.update(result['meddra_ids'])
 
-    if(synonyms.contains(name)):
+    if name in synonyms:
         synonyms.remove(name)
 
         return jsonify({
