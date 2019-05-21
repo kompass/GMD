@@ -105,6 +105,32 @@ def orpha_disease_by_name(name):
         'meddra_ids': meddra_ids
     }
 
+def sider2_disease_by_name(name):
+    synonyms = set()
+
+    omim_ids = set()
+    orpha_ids = set()
+    ulms_ids = set()
+    meddra_ids = set()
+
+    db = MySQLdb.connect(host='neptune.telecomnancy.univ-lorraine.fr', db='gmd', user='gmd-read', passwd='esial')
+    c = db.cursor()
+
+    c.execute("""SELECT cui, meddra_id WHERE label = %s""", (name,))
+
+    for record in c.fetchall():
+        ulms_ids.update(record[0])
+
+        meddra_ids.update(record[1])
+
+    return {
+        'synonyms': synonyms,
+        'omim_ids': omim_ids,
+        'orpha_ids': orpha_ids,
+        'ulms_ids': ulms_ids,
+        'meddra_ids': meddra_ids
+    }
+
 
 def omim_onto_disease_by_name(name):
     synonyms = set()
@@ -146,7 +172,8 @@ def disease(name):
 
     results_by_name = [
         orpha_disease_by_name(name),
-        omim_onto_disease_by_name(name)
+        omim_onto_disease_by_name(name),
+        sider2_disease_by_name(name)
     ]
 
     for result in results_by_name:
