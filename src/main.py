@@ -30,6 +30,15 @@ def omim_onto_split_synonyms(record):
 
     return record
 
+def omim_onto_clean_preferred_label(record):
+    pl = record['PreferredLabel']
+
+    pl = pl.split(',')[0]
+
+    record['PreferredLabel'] = pl
+
+    return record
+
 client = pymongo.MongoClient('127.0.0.1', 27017)
 db = client['gmd']
 
@@ -44,6 +53,7 @@ records = import_omim_onto_from_source('Data/omim_onto.csv', {'ClassId': 0, 'Pre
 records = filter(lambda record: record['ClassId'].startswith('http://purl.bioontology.org/ontology/OMIM'), records)
 records = map(omim_onto_clean_class_id, records)
 records = map(omim_onto_split_synonyms, records)
+records = map(omim_onto_clean_preferred_label, records)
 db.omim_onto.insert_many(records)
 
 print('Done.')
