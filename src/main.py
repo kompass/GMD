@@ -116,7 +116,7 @@ def sider2_disease_by_name(name):
     db = MySQLdb.connect(host='neptune.telecomnancy.univ-lorraine.fr', db='gmd', user='gmd-read', passwd='esial')
     c = db.cursor()
 
-    c.execute("""SELECT cui, meddra_id WHERE label = %s""", (name,))
+    c.execute("""SELECT cui, meddra_id FROM meddra WHERE label = %s""", (name,))
 
     for record in c.fetchall():
         ulms_ids.update(record[0])
