@@ -20,7 +20,11 @@ def omim_onto_clean_class_id(record):
 
 def omim_onto_split_synonyms(record):
     synonyms = record['Synonyms']
-    synonyms = synonyms.split('|')
+
+    if synonyms == '':
+        synonyms = []
+    else:
+        synonyms = synonyms.split('|')
 
     record['Synonyms'] = synonyms
 
