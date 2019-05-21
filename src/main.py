@@ -52,7 +52,7 @@ CORS(app)
 
 
 def orpha_disease_by_name(name):
-	synonyms = set()
+    synonyms = set()
     omim_ids = set()
     orpha_ids = set()
     ulms_ids = set()
@@ -60,48 +60,48 @@ def orpha_disease_by_name(name):
     disease_records = db.disease.find({'$or': [{'name': name}, {'synonyms': name}]}, {'_id': False})
 
     for record in disease_records:
-    	synonyms.add(record['name'])
-    	synonyms.update(record['synonyms'])
+        synonyms.add(record['name'])
+        synonyms.update(record['synonyms'])
 
-    	omim_ids.update(record['omim'])
+        omim_ids.update(record['omim'])
 
-    	orpha_ids.add(record['orpha'])
+        orpha_ids.add(record['orpha'])
 
-    	ulms_ids.update(record['ulms'])
+        ulms_ids.update(record['ulms'])
 
     return {
-    	'synonyms': synonyms,
-    	'omim_ids': omim_ids,
-    	'orpha_ids': orpha_ids,
-    	'ulms_ids': ulms_ids
+        'synonyms': synonyms,
+        'omim_ids': omim_ids,
+        'orpha_ids': orpha_ids,
+        'ulms_ids': ulms_ids
     }
 
 
 def omim_disease_by_name(name):
-	synonyms = set()
+    synonyms = set()
     omim_ids = set()
     orpha_ids = set()
     ulms_ids = set()
 
-	return {
-    	'synonyms': synonyms,
-    	'omim_ids': omim_ids,
-    	'orpha_ids': orpha_ids,
-    	'ulms_ids': ulms_ids
+    return {
+        'synonyms': synonyms,
+        'omim_ids': omim_ids,
+        'orpha_ids': orpha_ids,
+        'ulms_ids': ulms_ids
     }
 
 
 def omim_onto_disease_by_name(name):
-	synonyms = set()
+    synonyms = set()
     omim_ids = set()
     orpha_ids = set()
     ulms_ids = set()
 
-	return {
-    	'synonyms': synonyms,
-    	'omim_ids': omim_ids,
-    	'orpha_ids': orpha_ids,
-    	'ulms_ids': ulms_ids
+    return {
+        'synonyms': synonyms,
+        'omim_ids': omim_ids,
+        'orpha_ids': orpha_ids,
+        'ulms_ids': ulms_ids
     }
 
 
@@ -115,30 +115,30 @@ def disease(name):
     ulms_ids = set()
 
     results_by_name = [
-    	orpha_disease_by_name(name),
-    	omim_disease_by_name(name),
-    	omim_onto_disease_by_name(name)
+        orpha_disease_by_name(name),
+        omim_disease_by_name(name),
+        omim_onto_disease_by_name(name)
     ]
 
     for result in results_by_name:
-    	synonyms.update(result['synonyms'])
-    	omim_ids.update(result['omim_ids'])
-    	orpha_ids.update(result['orpha_ids'])
-    	ulms_ids.update(result['ulms_ids'])
+        synonyms.update(result['synonyms'])
+        omim_ids.update(result['omim_ids'])
+        orpha_ids.update(result['orpha_ids'])
+        ulms_ids.update(result['ulms_ids'])
 
     if(synonyms.contains(name)):
-    	synonyms.remove(name)
+        synonyms.remove(name)
 
-	    return jsonify({
-	    		'name': name,
-	    		'synonyms': list(synonyms),
-	    		'symptoms': [],
-	    		'drugs': []
-	    	})
-	else:
-		return jsonify({
-				'name': '',
-				'synonyms': [],
-				'symptoms': [],
-				'drugs': []
-			})
+        return jsonify({
+                'name': name,
+                'synonyms': list(synonyms),
+                'symptoms': [],
+                'drugs': []
+            })
+    else:
+        return jsonify({
+                'name': '',
+                'synonyms': [],
+                'symptoms': [],
+                'drugs': []
+            })
