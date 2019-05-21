@@ -119,9 +119,9 @@ def sider2_disease_by_name(name):
     c.execute("""SELECT cui, meddra_id FROM meddra WHERE label = %s""", (name,))
 
     for record in c.fetchall():
-        ulms_ids.update(record[0])
+        ulms_ids.add(record[0])
 
-        meddra_ids.update(record[1])
+        meddra_ids.add(record[1])
 
     return {
         'synonyms': synonyms,
