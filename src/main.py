@@ -2,6 +2,7 @@ from flask import Flask, jsonify
 import urllib.parse
 import pymongo
 from flask_cors import CORS
+import MySQLdb
 
 from omim import import_omim_from_source, import_omim_onto_from_source
 from orpha import import_disease_from_source, import_disease_clinical_sign_from_source
@@ -105,23 +106,6 @@ def orpha_disease_by_name(name):
     }
 
 
-def omim_disease_by_name(name):
-    synonyms = set()
-
-    omim_ids = set()
-    orpha_ids = set()
-    ulms_ids = set()
-    meddra_ids = set()
-
-    return {
-        'synonyms': synonyms,
-        'omim_ids': omim_ids,
-        'orpha_ids': orpha_ids,
-        'ulms_ids': ulms_ids,
-        'meddra_ids': meddra_ids
-    }
-
-
 def omim_onto_disease_by_name(name):
     synonyms = set()
 
@@ -162,7 +146,6 @@ def disease(name):
 
     results_by_name = [
         orpha_disease_by_name(name),
-        omim_disease_by_name(name),
         omim_onto_disease_by_name(name)
     ]
 
@@ -173,6 +156,9 @@ def disease(name):
         orpha_ids.update(result['orpha_ids'])
         ulms_ids.update(result['ulms_ids'])
         meddra_ids.update(result['meddra_ids'])
+
+    results_by_ids = [
+    ]
 
     if name in synonyms:
         synonyms.remove(name)
