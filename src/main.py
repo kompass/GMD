@@ -126,12 +126,19 @@ def disease(name):
     	orpha_ids.update(result['orpha_ids'])
     	ulms_ids.update(result['ulms_ids'])
 
+    if(synonyms.contains(name)):
+    	synonyms.remove(name)
 
-    synonyms.remove(name)
-
-    return jsonify({
-    		'name': name,
-    		'synonyms': list(synonyms),
-    		'symptoms': [],
-    		'drugs': []
-    	})
+	    return jsonify({
+	    		'name': name,
+	    		'synonyms': list(synonyms),
+	    		'symptoms': [],
+	    		'drugs': []
+	    	})
+	else:
+		return jsonify({
+				'name': '',
+				'synonyms': [],
+				'symptoms': [],
+				'drugs': []
+			})
