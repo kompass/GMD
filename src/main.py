@@ -76,13 +76,15 @@ CORS(app)
 
 def orpha_disease_by_name(name):
     synonyms = set()
+
     omim_ids = set()
     orpha_ids = set()
     ulms_ids = set()
+    meddra_ids = set()
 
-    disease_records = db.disease.find({'$or': [{'name': name}, {'synonyms': name}]}, {'_id': False})
+    records = db.disease.find({'$or': [{'name': name}, {'synonyms': name}]}, {'_id': False})
 
-    for record in disease_records:
+    for record in records:
         synonyms.add(record['name'])
         synonyms.update(record['synonyms'])
 
@@ -92,39 +94,58 @@ def orpha_disease_by_name(name):
 
         ulms_ids.update(record['ulms'])
 
+        meddra_ids.update(record['meddra'])
+
     return {
         'synonyms': synonyms,
         'omim_ids': omim_ids,
         'orpha_ids': orpha_ids,
-        'ulms_ids': ulms_ids
+        'ulms_ids': ulms_ids,
+        'meddra_ids': meddra_ids
     }
 
 
 def omim_disease_by_name(name):
     synonyms = set()
+
     omim_ids = set()
     orpha_ids = set()
     ulms_ids = set()
+    meddra_ids = set()
 
     return {
         'synonyms': synonyms,
         'omim_ids': omim_ids,
         'orpha_ids': orpha_ids,
-        'ulms_ids': ulms_ids
+        'ulms_ids': ulms_ids,
+        'meddra_ids': meddra_ids
     }
 
 
 def omim_onto_disease_by_name(name):
     synonyms = set()
+
     omim_ids = set()
     orpha_ids = set()
     ulms_ids = set()
+    meddra_ids = set()
+
+    records = db.omim_onto.find({'$or': [{'PreferredLabel': name}, {'Synonyms': name}]}, {'_id': False})
+
+    for record in records:
+        synonyms.add(record['PreferredLabel'])
+        synonyms.update(record['Synonyms'])
+
+        omim_ids.update(record['ClassId'])
+
+        ulms_ids.update(record['CUI'])
 
     return {
         'synonyms': synonyms,
         'omim_ids': omim_ids,
         'orpha_ids': orpha_ids,
-        'ulms_ids': ulms_ids
+        'ulms_ids': ulms_ids,
+        'meddra_ids': meddra_ids
     }
 
 
@@ -133,9 +154,11 @@ def disease(name):
     name = urllib.parse.unquote_plus(name)
 
     synonyms = set()
+
     omim_ids = set()
     orpha_ids = set()
     ulms_ids = set()
+    meddra_ids = set()
 
     results_by_name = [
         orpha_disease_by_name(name),
@@ -145,9 +168,11 @@ def disease(name):
 
     for result in results_by_name:
         synonyms.update(result['synonyms'])
+
         omim_ids.update(result['omim_ids'])
         orpha_ids.update(result['orpha_ids'])
         ulms_ids.update(result['ulms_ids'])
+        meddra_ids.update(result['meddra_ids'])
 
     if(synonyms.contains(name)):
         synonyms.remove(name)
