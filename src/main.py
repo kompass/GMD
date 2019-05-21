@@ -6,7 +6,7 @@ from flask_cors import CORS
 from omim import import_omim_from_source, import_omim_onto_from_source
 from orpha import import_disease_from_source, import_disease_clinical_sign_from_source
 
-def clean_class_id(record):
+def omim_onto_clean_class_id(record):
     class_id = record['ClassId']
     class_id = class_id.split('/')[-1]
     class_id = class_id.split('.')[0]
@@ -18,19 +18,28 @@ def clean_class_id(record):
 
     return record
 
+def omim_onto_split_synonyms(record):
+    synonyms = record['Synonyms']
+    synonyms = synonyms.split('|')
+
+    record['Synonyms'] = synonyms
+
+    return record
+
 client = pymongo.MongoClient('127.0.0.1', 27017)
 db = client['gmd']
 
 print('Reindexing OMIM...', end='', flush=True)
 
 db.omim.drop()
-records = import_omim_from_source('Data/omim.txt', ['TI', 'CS', 'NO'], ['NO'])
+records = import_omim_from_source('Data/omim.txt', ['CS', 'NO'], ['NO'])
 db.omim.insert_many(records)
 
 db.omim_onto.drop()
 records = import_omim_onto_from_source('Data/omim_onto.csv', {'ClassId': 0, 'PreferredLabel': 1, 'Synonyms': 2, 'CUI': 5})
 records = filter(lambda record: record['ClassId'].startswith('http://purl.bioontology.org/ontology/OMIM'), records)
-records = map(clean_class_id, records)
+records = map(omim_onto_clean_class_id, records)
+records = map(omim_onto_split_synonyms, records)
 db.omim_onto.insert_many(records)
 
 print('Done.')
