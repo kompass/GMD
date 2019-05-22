@@ -105,6 +105,13 @@ def orpha_disease_by_name(name):
         'meddra_ids': meddra_ids
     }
 
+def orpha_symptoms_by_ids(ids):
+    orpha_ids = ids['orpha_ids']
+
+    records = db.disease_clinical_sign.find({'orphaNumber': {'$in': orpha_ids}})
+
+    return map(lambda record: record['clinicalSign'], records)
+
 def sider2_disease_by_name(name):
     synonyms = set()
 
@@ -159,6 +166,10 @@ def omim_onto_disease_by_name(name):
     }
 
 
+def omim_symptoms_by_ids(ids):
+    pass
+
+
 @app.route('/gmd/api/disease/<name>')
 def disease(name):
     name = urllib.parse.unquote_plus(name)
@@ -184,8 +195,21 @@ def disease(name):
         ulms_ids.update(result['ulms_ids'])
         meddra_ids.update(result['meddra_ids'])
 
-    results_by_ids = [
+    ids = {
+        'omim_ids': omim_ids,
+        'orpha_ids': orpha_ids,
+        'ulms_ids': ulms_ids,
+        'meddra_ids': meddra_ids
+    }
+
+    symptoms_by_ids = [
+        orpha_symptoms_by_ids(ids),
+
     ]
+
+    symptoms = set()
+    for symptom_bulk in symptoms_by_ids:
+        symptoms.update(symptom_bulk)
 
     if name in synonyms:
         synonyms.remove(name)
@@ -193,7 +217,7 @@ def disease(name):
         return jsonify({
                 'name': name,
                 'synonyms': list(synonyms),
-                'symptoms': [],
+                'symptoms': list(symptoms),
                 'drugs': []
             })
     else:
