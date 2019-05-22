@@ -167,7 +167,11 @@ def omim_onto_disease_by_name(name):
 
 
 def omim_symptoms_by_ids(ids):
-    pass
+    omim_ids = ids['omim_ids']
+
+    records = db.omim.find({'NO': {'$in': list(omim_ids)}})
+
+    return map(lambda record: record['CS'], records)
 
 
 @app.route('/gmd/api/disease/<name>')
@@ -204,7 +208,7 @@ def disease(name):
 
     symptoms_by_ids = [
         orpha_symptoms_by_ids(ids),
-
+        omim_symptoms_by_ids(ids)
     ]
 
     symptoms = set()
