@@ -108,7 +108,7 @@ def orpha_disease_by_name(name):
 def orpha_symptoms_by_ids(ids):
     orpha_ids = ids['orpha_ids']
 
-    records = db.disease_clinical_sign.find({'orphaNumber': {'$in': orpha_ids}})
+    records = db.disease_clinical_sign.find({'orphaNumber': {'$in': list(orpha_ids)}})
 
     return map(lambda record: record['clinicalSign'], records)
 
