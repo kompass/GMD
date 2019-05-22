@@ -170,6 +170,7 @@ def omim_symptoms_by_ids(ids):
     omim_ids = ids['omim_ids']
 
     records = db.omim.find({'NO': {'$in': list(omim_ids)}})
+    records = filter(lambda record: 'CS' in record, records)
 
     return map(lambda record: record['CS'], records)
 
